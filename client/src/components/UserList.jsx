@@ -1,6 +1,15 @@
+import {useEffect} from "react";
+
 import UserListItem from "./UserListItem.jsx";
+import userService from "../services/userService.js";
 
 export default function UserList() {
+
+    useEffect(() => {
+        userService.getAllUsersTable().then(users => {console.log(users)})
+    }, []);
+
+
     return (
 
         <table className="table">
