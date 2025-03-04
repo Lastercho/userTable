@@ -4,6 +4,7 @@ import userService from "../services/userService.js";
 
 export default function UserListItem(user) {
 
+    const d = new Date(user.createdAt);
     return (
 
         <tr>
@@ -18,7 +19,7 @@ export default function UserListItem(user) {
             <td>{user.lastName}</td>
             <td>{user.email}</td>
             <td>{user.phoneNumber}</td>
-            <td>{user.createdAt}</td>
+            <td>{d.toLocaleString(`en-US`, {year: 'numeric', month:'short', day: 'numeric'})}</td>
             <td className="actions">
                 <button className="btn edit-btn" title="Edit">
                     <svg
