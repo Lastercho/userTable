@@ -1,12 +1,13 @@
-import {useEffect} from "react";
+import React, {useEffect} from "react";
 
 import UserListItem from "./UserListItem.jsx";
 import userService from "../services/userService.js";
+import UserService from "../services/userService.js";
 
 export default function UserList() {
-
+const [users, setUsers] = React.useState([]);
     useEffect(() => {
-        userService.getAllUsersTable().then(users => {console.log(users)})
+        userService.getAllUsersTable().then(users => {setUsers(users)})
     }, []);
 
 
@@ -111,7 +112,7 @@ export default function UserList() {
             </thead>
             <tbody>
             {/* Table row component */}
-            <UserListItem />
+            {users.map(user => <UserListItem key={user._id} {...user}/>)}
             </tbody>
         </table>
     )
