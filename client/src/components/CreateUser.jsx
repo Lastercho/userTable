@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function CreateUser({onClose,}) {
+export default function CreateUser({onClose, onSave}) {
     return (
         <div className="overlay">
             <div className="backdrop" onClick={onClose}></div>
@@ -18,7 +18,7 @@ export default function CreateUser({onClose,}) {
                             </svg>
                         </button>
                     </header>
-                    <form>
+                    <form onSubmit={onSave}>
                         <div className="form-row">
                             <div className="form-group">
                                 <label htmlFor="firstName">First name</label>
@@ -95,7 +95,7 @@ export default function CreateUser({onClose,}) {
                             </div>
                         </div>
                         <div id="form-actions">
-                            <button id="action-save" className="btn" type="submit">Save</button>
+                            <button id="action-save" className="btn" type="submit" >Save</button>
                             <button id="action-cancel" className="btn" type="button" onClick={onClose}>
                                 Cancel
                             </button>

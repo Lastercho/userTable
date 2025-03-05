@@ -9,24 +9,40 @@ import CreateUser from "./CreateUser.jsx";
 
 export default function UserList() {
 
-const [users, setUsers] = useState([]);
-const [showCreate, setShowCreate] = useState(false);
+    const [users, setUsers] = useState([]);
+    const [showCreate, setShowCreate] = useState(false);
 
 
     useEffect(() => {
-        userService.getAllUsersTable().then(users => {setUsers(users)})
+        userService.getAllUsersTable().then(users => {
+            setUsers(users)
+        })
     }, []);
 
-    const createUserClickHandler = () => { setShowCreate(true); };
-    const closeCreateUserClickHandler = () => { setShowCreate(false); };
-
+    const createUserClickHandler = () => {
+        setShowCreate(true);
+    };
+    const closeCreateUserClickHandler = () => {
+        setShowCreate(false);
+    };
+    const saveCreateUserClickHandler = (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const addedUser = Object.fromEntries(formData);
+        console.log(addedUser);
+        setShowCreate(false);
+    };
 
     return (
 
         <section className="card users-container">
             {/* Search bar component */}
             <Search/>
-            {showCreate && <CreateUser onClose={closeCreateUserClickHandler}/>}
+            {showCreate && <
+                CreateUser
+                onClose={closeCreateUserClickHandler}
+                onSave={saveCreateUserClickHandler}/>
+            }
             {/* Table component */}
             <div className="table-wrapper">
                 {/* Overlap components  */}
@@ -195,7 +211,6 @@ const [showCreate, setShowCreate] = useState(false);
                     {users.map(user => <UserListItem key={user._id} {...user}/>)}
                     </tbody>
                 </table>
-
 
 
             </div>
