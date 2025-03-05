@@ -17,7 +17,8 @@ const [showCreate, setShowCreate] = useState(false);
         userService.getAllUsersTable().then(users => {setUsers(users)})
     }, []);
 
-    const addUserClickHandler = () => { setShowCreate(true); };
+    const createUserClickHandler = () => { setShowCreate(true); };
+    const closeCreateUserClickHandler = () => { setShowCreate(false); };
 
 
     return (
@@ -25,7 +26,7 @@ const [showCreate, setShowCreate] = useState(false);
         <section className="card users-container">
             {/* Search bar component */}
             <Search/>
-            {showCreate && <CreateUser/>}
+            {showCreate && <CreateUser onClose={closeCreateUserClickHandler}/>}
             {/* Table component */}
             <div className="table-wrapper">
                 {/* Overlap components  */}
@@ -199,7 +200,7 @@ const [showCreate, setShowCreate] = useState(false);
 
             </div>
             {/* New user button  */}
-            <button className="btn-add btn" onClick={addUserClickHandler}>Add new user</button>
+            <button className="btn-add btn" onClick={createUserClickHandler}>Add new user</button>
             {/* Pagination component  */}
             <Pagination/>
         </section>
