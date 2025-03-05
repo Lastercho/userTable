@@ -6,11 +6,13 @@ import UserService from "../services/userService.js";
 import Search from "./Search.jsx";
 import Pagination from "./Pagination.jsx";
 import CreateUser from "./CreateUser.jsx";
+import UserInfo from "./UserInfo.jsx";
 
 export default function UserList() {
 
     const [users, setUsers] = useState([]);
     const [showCreate, setShowCreate] = useState(false);
+    const [userIdInfo, setUserIdInfo] = useState(null);
 
 
     useEffect(() => {
@@ -25,13 +27,25 @@ export default function UserList() {
     const closeCreateUserClickHandler = () => {
         setShowCreate(false);
     };
-    const saveCreateUserClickHandler = (e) => {
+
+    const closeInfoUserClickHandler = () => {
+        setUserIdInfo(null);
+    };
+
+    const saveCreateUserClickHandler = async (e) => {
         e.preventDefault();
         const formData = new FormData(e.target);
         const addedUser = Object.fromEntries(formData);
-        console.log(addedUser);
+        await userService.createUser(addedUser)
+        setUsers(state => [...users, addedUser]);
+
         setShowCreate(false);
     };
+
+
+    const infoClickHandler = (userId) => {
+        setUserIdInfo(userId);
+       }
 
     return (
 
@@ -44,6 +58,13 @@ export default function UserList() {
                 onSave={saveCreateUserClickHandler}/>
             }
             {/* Table component */}
+
+
+            { userIdInfo && <UserInfo userIdInfo={userIdInfo} onClose={closeInfoUserClickHandler}/>}
+
+
+
+
             <div className="table-wrapper">
                 {/* Overlap components  */}
                 {/* <div class="loading-shade"> */}
@@ -208,7 +229,10 @@ export default function UserList() {
                     </thead>
                     <tbody>
                     {/* Table row component */}
-                    {users.map(user => <UserListItem key={user._id} {...user}/>)}
+                    {users.map(user => <UserListItem
+                        key={user._id}
+                        onInfoClick={infoClickHandler}
+                        {...user} />)}
                     </tbody>
                 </table>
 

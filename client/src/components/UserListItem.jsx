@@ -1,25 +1,26 @@
-import {useEffect} from "react";
-
-import userService from "../services/userService.js";
 import {dateTimeUtils} from "../utils/dateTimeUtils.js";
 
-export default function UserListItem(user) {
+export default function UserListItem({
+                                        _id, firstName, imageUrl, lastName, email, phoneNumber, createdAt, onInfoClick
+                                     }) {
+
 
     return (
+
 
         <tr>
             <td>
                 <img
-                    src= {user.imageUrl}
-                    alt={`${user.firstName}'s profile`}
+                    src={imageUrl}
+                    alt={`${firstName}'s profile`}
                     className="image"
                 />
             </td>
-            <td>{user.firstName}</td>
-            <td>{user.lastName}</td>
-            <td>{user.email}</td>
-            <td>{user.phoneNumber}</td>
-            <td> {dateTimeUtils(user.createdAt)}</td>
+            <td>{firstName}</td>
+            <td>{lastName}</td>
+            <td>{email}</td>
+            <td>{phoneNumber}</td>
+            <td> {dateTimeUtils(createdAt)}</td>
             <td className="actions">
                 <button className="btn edit-btn" title="Edit">
                     <svg
@@ -55,7 +56,7 @@ export default function UserListItem(user) {
                         ></path>
                     </svg>
                 </button>
-                <button className="btn info-btn" title="Info">
+                <button className="btn info-btn" title="Info" onClick={() => onInfoClick(_id)}>
                     <svg
                         aria-hidden="true"
                         focusable="false"
@@ -73,7 +74,6 @@ export default function UserListItem(user) {
                     </svg>
                 </button>
             </td>
-        </tr>
-    )
+        </tr>)
 
 }
