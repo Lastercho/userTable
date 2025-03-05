@@ -28,5 +28,17 @@ export default {
         })
         return await res.json();
 
-    }
+    },
+
+    async deleteUser(userId) {
+        const res = await fetch(`${baseUrl}/${userId}`,
+            {
+                method: 'DELETE',
+                headers: {'Content-Type': 'application/json'},
+            }
+
+
+            );
+        // return null;
+    },
 }

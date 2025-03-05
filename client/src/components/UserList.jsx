@@ -2,22 +2,25 @@ import React, {useEffect, useState} from "react";
 
 import UserListItem from "./UserListItem.jsx";
 import userService from "../services/userService.js";
-import UserService from "../services/userService.js";
 import Search from "./Search.jsx";
 import Pagination from "./Pagination.jsx";
 import CreateUser from "./CreateUser.jsx";
 import UserInfo from "./UserInfo.jsx";
+import DeleteUser from "./DeleteUser.jsx";
 
 export default function UserList() {
 
     const [users, setUsers] = useState([]);
     const [showCreate, setShowCreate] = useState(false);
     const [userIdInfo, setUserIdInfo] = useState(null);
+    const [userIdDelete, setUserIdDelete] = useState(null);
 
 
     useEffect(() => {
         userService.getAllUsersTable().then(users => {
             setUsers(users)
+            console.log(users)
+
         })
     }, []);
 
@@ -30,6 +33,7 @@ export default function UserList() {
 
     const closeInfoUserClickHandler = () => {
         setUserIdInfo(null);
+        setUserIdDelete(null);
     };
 
     const saveCreateUserClickHandler = async (e) => {
@@ -47,6 +51,15 @@ export default function UserList() {
         setUserIdInfo(userId);
        }
 
+       const deleteUserClickHandler = (userId) => {
+        setUserIdDelete(userId);
+       }
+    const deleteUserHandler = async () => {
+        await userService.deleteUser(userIdDelete);
+        setUsers(users => users.filter(u => u._id !== userIdDelete))
+        setUserIdDelete(null);
+    }
+
     return (
 
         <section className="card users-container">
@@ -61,6 +74,8 @@ export default function UserList() {
 
 
             { userIdInfo && <UserInfo userIdInfo={userIdInfo} onClose={closeInfoUserClickHandler}/>}
+
+            { userIdDelete && <DeleteUser userIdDelete={userIdDelete} onClose={closeInfoUserClickHandler} onSubmit={deleteUserHandler}/>}
 
 
 
@@ -232,6 +247,7 @@ export default function UserList() {
                     {users.map(user => <UserListItem
                         key={user._id}
                         onInfoClick={infoClickHandler}
+                        onDeleteClick={deleteUserClickHandler}
                         {...user} />)}
                     </tbody>
                 </table>

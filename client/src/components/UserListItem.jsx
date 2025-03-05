@@ -1,7 +1,16 @@
 import {dateTimeUtils} from "../utils/dateTimeUtils.js";
 
 export default function UserListItem({
-                                        _id, firstName, imageUrl, lastName, email, phoneNumber, createdAt, onInfoClick
+                                        _id,
+                                         firstName,
+                                         imageUrl,
+                                         lastName,
+                                         email,
+                                         phoneNumber,
+                                         createdAt,
+                                         onInfoClick,
+                                         onDeleteClick,
+
                                      }) {
 
 
@@ -39,7 +48,7 @@ export default function UserListItem({
                         ></path>
                     </svg>
                 </button>
-                <button className="btn delete-btn" title="Delete">
+                <button className="btn delete-btn" title="Delete" onClick={() => onDeleteClick(_id)}>
                     <svg
                         aria-hidden="true"
                         focusable="false"
