@@ -1,16 +1,23 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 
 import UserListItem from "./UserListItem.jsx";
 import userService from "../services/userService.js";
 import UserService from "../services/userService.js";
 import Search from "./Search.jsx";
 import Pagination from "./Pagination.jsx";
+import CreateUser from "./CreateUser.jsx";
 
 export default function UserList() {
-const [users, setUsers] = React.useState([]);
+
+const [users, setUsers] = useState([]);
+const [showCreate, setShowCreate] = useState(false);
+
+
     useEffect(() => {
         userService.getAllUsersTable().then(users => {setUsers(users)})
     }, []);
+
+    const addUserClickHandler = () => { setShowCreate(true); };
 
 
     return (
@@ -18,6 +25,7 @@ const [users, setUsers] = React.useState([]);
         <section className="card users-container">
             {/* Search bar component */}
             <Search/>
+            {showCreate && <CreateUser/>}
             {/* Table component */}
             <div className="table-wrapper">
                 {/* Overlap components  */}
@@ -191,7 +199,7 @@ const [users, setUsers] = React.useState([]);
 
             </div>
             {/* New user button  */}
-            <button className="btn-add btn">Add new user</button>
+            <button className="btn-add btn" onClick={addUserClickHandler}>Add new user</button>
             {/* Pagination component  */}
             <Pagination/>
         </section>
