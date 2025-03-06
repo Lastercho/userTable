@@ -14,9 +14,6 @@ export default {
 
 
     async createUser(user) {
-
-
-
         const res = await fetch(baseUrl, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -38,19 +35,28 @@ export default {
         },
 
     async updateUser (userId, user) {
+        console.log('userId', userId)
+        console.log('user', user)
+        const postDataNew =postData(user)
+        postDataNew._id = userId;
+
         const res = await fetch(`${baseUrl}/${userId}`,{
             method: 'PUT',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(postData(user)),
+            body: JSON.stringify(postDataNew),
         })
+        return await res.json();
     }
 }
 
 function postData(user) {
     const {country, city, street, streetNumber, ...postData} = user;
     postData.address = {country, city, street, streetNumber};
+    console.log('postData', postData.createdAt);
 
-    postData.createdAt = new Date().toISOString().slice(0, 10);
+    if (!postData.createdAt) {
+        postData.createdAt = new Date().toISOString().slice(0, 10);
+    }
     postData.updatedAt = new Date().toISOString().slice(0, 10);
     console.log(postData);
     return postData;

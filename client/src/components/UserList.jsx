@@ -13,7 +13,9 @@ export default function UserList() {
     const [users, setUsers] = useState([]);
     const [showCreate, setShowCreate] = useState(false);
     const [userIdInfo, setUserIdInfo] = useState(null);
-    const [userIdDelete, setUserIdDelete] = useState(null);
+    const [userIdToHandle, setUserIdToHandle] = useState(null);
+    const [userIdToEdit, setUserIdToEdit] = useState(null);
+
 
 
     useEffect(() => {
@@ -29,11 +31,13 @@ export default function UserList() {
     };
     const closeCreateUserClickHandler = () => {
         setShowCreate(false);
+        setUserIdToEdit(null);
     };
 
     const closeInfoUserClickHandler = () => {
         setUserIdInfo(null);
-        setUserIdDelete(null);
+        setUserIdToHandle(null);
+
     };
 
     const saveCreateUserClickHandler = async (e) => {
@@ -51,13 +55,31 @@ export default function UserList() {
         setUserIdInfo(userId);
        }
 
-       const deleteUserClickHandler = (userId) => {
-        setUserIdDelete(userId);
-       }
+    const deleteUserClickHandler = (userId) => {
+        setUserIdToHandle(userId);
+    }
     const deleteUserHandler = async () => {
-        await userService.deleteUser(userIdDelete);
-        setUsers(users => users.filter(u => u._id !== userIdDelete))
-        setUserIdDelete(null);
+        await userService.deleteUser(userIdToHandle);
+        setUsers(users => users.filter(u => u._id !== userIdToHandle))
+        setUserIdToHandle(null);
+    }
+
+    let saveEditUserClickHandler  = async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const editedUser = Object.fromEntries(formData);
+        console.log('e.target', editedUser);
+        await userService.updateUser(userIdToEdit, editedUser)
+        setUsers(state => state.filter(u => u._id === userIdToEdit ? editedUser : u));
+        setShowCreate(false);
+    };
+
+
+    let editUserClickHandler = (userId) => {
+        setUserIdToEdit(userId);
+        console.log(userId)
+
+        setShowCreate(true);
     }
 
     return (
@@ -67,15 +89,19 @@ export default function UserList() {
             <Search/>
             {showCreate && <
                 CreateUser
+                userId={userIdToEdit}
                 onClose={closeCreateUserClickHandler}
-                onSave={saveCreateUserClickHandler}/>
-            }
+                onSave={saveCreateUserClickHandler}
+                onEdit={saveEditUserClickHandler}
+            />}
             {/* Table component */}
 
 
             { userIdInfo && <UserInfo userIdInfo={userIdInfo} onClose={closeInfoUserClickHandler}/>}
 
-            { userIdDelete && <DeleteUser userIdDelete={userIdDelete} onClose={closeInfoUserClickHandler} onSubmit={deleteUserHandler}/>}
+            { userIdToHandle && <DeleteUser userIdDelete={userIdToHandle} onClose={closeInfoUserClickHandler} onSubmit={deleteUserHandler}/>}
+
+
 
 
 
@@ -248,6 +274,7 @@ export default function UserList() {
                         key={user._id}
                         onInfoClick={infoClickHandler}
                         onDeleteClick={deleteUserClickHandler}
+                        onEditClick={editUserClickHandler}
                         {...user} />)}
                     </tbody>
                 </table>
